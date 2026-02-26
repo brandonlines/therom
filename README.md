@@ -26,8 +26,8 @@ git push -u origin main
 4. Pushes to `main` will deploy automatically.
 
 ## Site URL
-- Project site: `https://<YOUR_USER>.github.io/<YOUR_REPO>/`
-- User/org site (repo named `<YOUR_USER>.github.io`): `https://<YOUR_USER>.github.io/`
+- Project site: `https://brandonlines.github.io/therom/`
+- User/org site (repo named `brandonlines.github.io`): `https://brandonlines.github.io/`
 
 ## Local preview
 Open `index.html` in a browser, or run a local static server.
