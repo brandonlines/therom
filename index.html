@@ -1,0 +1,1532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ROM Social Studies: Find the Artifact</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09101f;
+      --panel: #111827;
+      --card: #162036;
+      --text: #e8eeff;
+      --muted: #7e94c4;
+      --good: #34d399;
+      --bad: #f87171;
+      --accent: #6ea8fe;
+      --gold: #f5c842;
+      --gold-dim: rgba(245,200,66,.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 900px 500px at 15% 0%, rgba(55,85,180,.18) 0%, transparent 65%),
+        radial-gradient(ellipse 600px 400px at 85% 90%, rgba(30,60,140,.14) 0%, transparent 60%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 14px 20px 12px;
+      display: flex; gap: 12px; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      flex-wrap: wrap;
+    }
+    .brand { display: flex; flex-direction: column; gap: 2px; }
+    .brand h1 {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 20px; font-weight: 600;
+      background: linear-gradient(95deg, #c9d9ff 0%, #8ab4ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand p { font-size: 11px; color: var(--muted); }
+
+    .headerRight { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    .playerWrap {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px; padding: 6px 10px;
+    }
+    .playerWrap label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .playerWrap select {
+      background: transparent; border: none; color: var(--text);
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer; outline: none; padding: 0;
+      -webkit-appearance: none;
+    }
+    .playerWrap select option { background: #1a2540; color: var(--text); }
+
+    .scoreChip {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(245,200,66,.08);
+      border: 1px solid rgba(245,200,66,.22);
+      border-radius: 10px; padding: 6px 10px;
+      font-size: 12px; font-weight: 600;
+      color: var(--gold);
+    }
+    .scoreChip span { font-size: 11px; color: rgba(245,200,66,.6); font-weight: 400; }
+
+    button.btnLeaderboard {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(110,168,254,.07);
+      border: 1px solid rgba(110,168,254,.25);
+      border-radius: 10px; padding: 6px 11px;
+      color: var(--accent); font-size: 12px; font-weight: 500;
+      cursor: pointer; font-family: inherit;
+      transition: background .2s;
+    }
+    button.btnLeaderboard:hover { background: rgba(110,168,254,.13); }
+
+    .pill {
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      border-radius: 999px; padding: 5px 11px;
+      font-size: 11px; color: var(--muted); white-space: nowrap;
+    }
+
+    main { padding: 16px 20px 20px; display: grid; gap: 14px; }
+
+    .panel {
+      background: linear-gradient(160deg, rgba(255,255,255,.055) 0%, rgba(255,255,255,.025) 100%);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px; padding: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.3);
+    }
+    .panel h2 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 10px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .panel .big { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+    .panel .small { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .selectGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 10px; margin-top: 12px;
+    }
+    .periodBtn {
+      cursor: pointer;
+      border: 1px solid rgba(110,168,254,.22);
+      background: rgba(110,168,254,.06);
+      color: var(--text);
+      padding: 14px; border-radius: 14px;
+      font-family: inherit; font-size: 14px;
+      transition: background .2s, border-color .2s, transform .08s;
+      text-align: left;
+    }
+    .periodBtn:hover { background: rgba(110,168,254,.12); border-color: rgba(110,168,254,.38); }
+    .periodBtn:active { transform: translateY(1px); }
+    .periodBtn b { display: block; font-size: 15px; margin-bottom: 5px; font-weight: 600; }
+    .periodBtn .meta { font-size: 11px; color: var(--muted); }
+    .periodBtn:disabled { opacity: .45; cursor: not-allowed; }
+
+    .noNameWarning {
+      background: rgba(248,113,113,.08);
+      border: 1px solid rgba(248,113,113,.22);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 12px; color: rgba(248,113,113,.85);
+      margin-top: 10px; display: none;
+    }
+    .noNameWarning.show { display: block; }
+
+    .hud {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .hudLeft { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .meter { font-size: 12px; color: var(--muted); }
+    .meter b { color: var(--text); }
+
+    .progressBar {
+      height: 3px; border-radius: 3px;
+      background: rgba(255,255,255,.07);
+      overflow: hidden; margin-bottom: 14px;
+    }
+    .progressFill {
+      height: 100%; border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--good));
+      transition: width .45s cubic-bezier(.4,0,.2,1);
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 7px 12px; border-radius: 10px;
+      font-family: inherit; font-size: 12px;
+      transition: background .2s, transform .07s;
+    }
+    button:hover { background: rgba(255,255,255,.10); }
+    button:active { transform: translateY(1px); }
+    .btnPrimary { background: rgba(52,211,153,.11); border-color: rgba(52,211,153,.28); }
+    .btnPrimary:hover { background: rgba(52,211,153,.17); }
+    .btnGhost { background: rgba(255,255,255,.04); }
+
+    .sceneWrap {
+      display: grid; grid-template-columns: 1.25fr .75fr;
+      gap: 14px; align-items: start;
+    }
+    @media (max-width: 880px) { .sceneWrap { grid-template-columns: 1fr; } }
+
+    .scene {
+      background: rgba(0,0,0,.14);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 16px; padding: 14px; overflow: hidden;
+    }
+    .sceneHeader {
+      display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;
+    }
+    .sceneHeader h3 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 17px; font-weight: 600;
+    }
+    .sceneHeader span { font-size: 11px; color: var(--muted); }
+
+    .clueBox {
+      background: rgba(110,168,254,.07);
+      border: 1px solid rgba(110,168,254,.2);
+      border-radius: 12px; padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .clueLabel {
+      font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 5px;
+    }
+    .clueText {
+      font-family: 'Crimson Pro', serif;
+      font-size: 16px; line-height: 1.45; color: var(--text);
+    }
+    .clueCategory { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+    .galleryWall {
+      border-radius: 14px;
+      background: linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.09);
+      padding: 10px;
+    }
+    .cardsGrid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 95px;
+      gap: 8px;
+      min-height: 580px;
+    }
+
+    .artCard {
+      position: relative; border-radius: 12px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      cursor: pointer; outline: none; padding: 0;
+      transition: border-color .2s, box-shadow .2s, transform .18s;
+    }
+    .artCard:hover { border-color: rgba(255,255,255,.28); transform: scale(1.016); box-shadow: 0 8px 28px rgba(0,0,0,.4); }
+    .artCard:focus-visible { box-shadow: 0 0 0 3px rgba(110,168,254,.4); }
+    .artCard.correct {
+      border-color: rgba(52,211,153,.55);
+      box-shadow: 0 0 0 3px rgba(52,211,153,.16) inset, 0 0 18px rgba(52,211,153,.14);
+    }
+    .artCard.wrong {
+      border-color: rgba(248,113,113,.5);
+      box-shadow: 0 0 0 3px rgba(248,113,113,.13) inset;
+      animation: shake .3s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .artCard img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: saturate(1.06) contrast(1.03);
+      transition: transform .32s ease;
+    }
+    .artCard:hover img { transform: scale(1.07); }
+    .artCard .label {
+      position: absolute; left: 7px; bottom: 7px;
+      font-size: 10px;
+      background: rgba(0,0,0,.62); backdrop-filter: blur(4px);
+      padding: 3px 7px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.10);
+      max-width: calc(100% - 14px);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .sceneTip { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+
+    .side { display: flex; flex-direction: column; gap: 12px; }
+    .list { display: flex; flex-direction: column; gap: 6px; }
+    .badge {
+      font-size: 11px; color: var(--muted);
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.03);
+      border-radius: 999px; padding: 5px 10px;
+      display: flex; gap: 6px; align-items: center;
+    }
+    .badge.done {
+      border-color: rgba(52,211,153,.28);
+      background: rgba(52,211,153,.07);
+      color: var(--text);
+    }
+
+    .winBanner {
+      display: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(245,200,66,.11), rgba(52,211,153,.09));
+      border: 1px solid rgba(245,200,66,.28);
+      padding: 22px 16px; text-align: center;
+      animation: fadeIn .4s ease;
+    }
+    .winBanner.show { display: block; }
+    .winBanner .trophy { font-size: 36px; margin-bottom: 8px; }
+    .winBanner h3 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 22px; font-weight: 600; color: var(--gold); margin-bottom: 6px;
+    }
+    .winBanner .winScore {
+      font-size: 28px; font-weight: 700; color: var(--text);
+      margin: 10px 0 4px;
+    }
+    .winBanner .winPct {
+      font-size: 13px; color: var(--muted); margin-bottom: 12px;
+    }
+    .winBanner p { font-size: 13px; color: var(--muted); }
+
+    .teacherNote {
+      background: rgba(245,200,66,.05);
+      border: 1px solid rgba(245,200,66,.16);
+      border-radius: 12px; padding: 11px 14px;
+      font-size: 12px; line-height: 1.5;
+      color: rgba(245,200,66,.65);
+    }
+    .teacherNote b { color: rgba(245,200,66,.85); display: block; margin-bottom: 2px; }
+
+    .modalBackdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.62); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px; z-index: 999;
+      opacity: 0; transition: opacity .22s ease;
+    }
+    .modalBackdrop.show { display: flex; }
+    .modalBackdrop.visible { opacity: 1; }
+    .modal {
+      width: min(800px, 100%); max-height: 90vh; overflow-y: auto;
+      background: linear-gradient(160deg, #1a2442 0%, #111827 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,.55);
+      transform: translateY(12px); transition: transform .22s ease;
+    }
+    .modalBackdrop.visible .modal { transform: translateY(0); }
+
+    .modalTop {
+      display: flex; gap: 14px; padding: 16px; align-items: flex-start;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .modalTop .mainImg {
+      width: 160px; height: 130px; object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.13);
+      flex-shrink: 0;
+    }
+    .modalTop h3 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 20px; font-weight: 600; margin-bottom: 4px; line-height: 1.2;
+    }
+    .modalTop p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .pointsBadge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(245,200,66,.1); border: 1px solid rgba(245,200,66,.25);
+      border-radius: 8px; padding: 3px 8px;
+      font-size: 12px; font-weight: 600; color: var(--gold);
+      margin-top: 8px;
+    }
+
+    .modalBody { padding: 14px; display: grid; gap: 10px; overflow-y: auto; }
+
+    .callout {
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 12px; padding: 12px 14px;
+      font-size: 13px; line-height: 1.55;
+      color: rgba(232,238,255,.82);
+      overflow: hidden;
+    }
+    .callout b { color: var(--text); }
+    .callout .calloutImg {
+      float: right;
+      width: 110px; height: 82px;
+      object-fit: cover;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.14);
+      margin: 0 0 8px 12px;
+    }
+    .callout .questionImg {
+      display: block;
+      width: 100%; height: 120px;
+      object-fit: cover;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.12);
+      margin-top: 10px;
+    }
+
+    .modalActions {
+      display: flex; gap: 10px; padding: 12px 14px;
+      flex-wrap: wrap; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+    .link { font-size: 12px; color: var(--muted); }
+    .link a { color: var(--text); text-decoration: none; border-bottom: 1px dashed rgba(255,255,255,.28); }
+    .link a:hover { border-bottom-color: rgba(52,211,153,.55); }
+
+    .lbBackdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.62); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px; z-index: 1000;
+      opacity: 0; transition: opacity .22s ease;
+    }
+    .lbBackdrop.show { display: flex; }
+    .lbBackdrop.visible { opacity: 1; }
+    .lbModal {
+      width: min(680px, 100%); max-height: 88vh;
+      background: linear-gradient(160deg, #1a2442 0%, #111827 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 20px; display: flex; flex-direction: column;
+      box-shadow: 0 40px 100px rgba(0,0,0,.55);
+      transform: translateY(12px); transition: transform .22s ease;
+    }
+    .lbBackdrop.visible .lbModal { transform: translateY(0); }
+
+    .lbHeader {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      flex-shrink: 0;
+    }
+    .lbHeader h2 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 20px; font-weight: 600;
+    }
+    .lbHeader .lbSubtitle { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .lbFilters {
+      display: flex; gap: 8px; padding: 12px 18px 8px;
+      flex-wrap: wrap; flex-shrink: 0;
+    }
+    .lbFilter {
+      font-size: 11px; padding: 5px 10px; border-radius: 8px;
+      cursor: pointer; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12); color: var(--muted);
+      transition: background .2s, color .2s;
+    }
+    .lbFilter.active {
+      background: rgba(110,168,254,.12);
+      border-color: rgba(110,168,254,.3);
+      color: var(--accent);
+    }
+
+    .lbTable { overflow-y: auto; flex: 1; padding: 0 18px 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--muted); text-align: left; padding: 8px 6px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      position: sticky; top: 0; background: #111827; z-index: 1;
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: background .15s;
+    }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    tbody tr.myScore { background: rgba(245,200,66,.05); }
+    tbody tr.myScore td:first-child { color: var(--gold); font-weight: 600; }
+    tbody td { padding: 9px 6px; font-size: 13px; color: var(--text); }
+    tbody td.muted { color: var(--muted); font-size: 12px; }
+    .pctBar {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pctBarTrack {
+      flex: 1; height: 4px; background: rgba(255,255,255,.08);
+      border-radius: 4px; overflow: hidden; min-width: 40px;
+    }
+    .pctBarFill {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--good));
+    }
+    .lbEmpty {
+      padding: 32px; text-align: center;
+      color: var(--muted); font-size: 13px; line-height: 1.6;
+    }
+    .medalIcon { font-size: 16px; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+      background: rgba(13,20,38,.92); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 9px 16px; border-radius: 12px;
+      font-size: 13px; color: var(--text);
+      display: none; z-index: 1002; white-space: nowrap;
+    }
+    .toast.show { display: block; animation: toastIn .18s ease; }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translate(-50%, 6px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .callout::after { content: ''; display: table; clear: both; }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="brand">
+    <h1>Find the Artifact - ROM Edition</h1>
+    <p>Pick a time period and follow the clues to find each exhibit.</p>
+  </div>
+  <div class="headerRight">
+    <div class="playerWrap">
+      <label for="nameSelect">Player</label>
+      <select id="nameSelect">
+        <option value="">Choose name...</option>
+        <option>Ava</option><option>Berkeley</option><option>Caroline</option>
+        <option>Cole</option><option>Everly</option><option>Holden</option>
+        <option>Isabella</option><option>Jack</option><option>Layan</option>
+        <option>Leo</option><option>Maggie</option><option>Marc</option>
+        <option>Markus</option><option>Maya</option><option>Nate</option>
+        <option>Quinn</option><option>Sienna</option><option>Teddy</option>
+      </select>
+    </div>
+    <div class="scoreChip" id="scoreChip" style="display:none;">
+      <span>Score</span><strong id="scoreDisplay">0</strong>
+    </div>
+    <button class="btnLeaderboard" id="btnOpenLb">Leaderboard</button>
+    <div class="pill" id="statusPill">Choose a period to start</div>
+  </div>
+</header>
+
+<main>
+  <section class="panel" id="startPanel">
+    <h2>Step 1</h2>
+    <p class="big"><b>Select a period of history</b></p>
+    <p class="small">Read each clue carefully, then click the matching artifact on the exhibit wall. Fewer wrong guesses = higher score!</p>
+    <div class="noNameWarning" id="noNameWarning">Please choose your name above before starting.</div>
+    <div class="selectGrid" id="periodButtons"></div>
+  </section>
+
+  <section class="panel" id="gamePanel" style="display:none;">
+    <div class="hud">
+      <div class="hudLeft">
+        <button class="btnGhost" id="btnBack">Periods</button>
+        <span class="pill" id="periodPill"></span>
+        <span class="meter">Found: <b id="foundCount">0</b>/<b id="totalCount">0</b></span>
+      </div>
+      <div class="hudLeft">
+        <button class="btnPrimary" id="btnNewClue">New clue</button>
+        <button class="btnGhost" id="btnReset">Reset</button>
+      </div>
+    </div>
+
+    <div class="progressBar"><div class="progressFill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="winBanner" id="winBanner">
+      <div class="trophy">Collection Complete</div>
+      <h3>Collection Complete!</h3>
+      <div class="winScore" id="winScore">0</div>
+      <div class="winPct" id="winPct"></div>
+      <p>Score saved to the leaderboard. Try another period or reset to play again.</p>
+    </div>
+
+    <div class="sceneWrap" id="sceneWrap">
+      <div class="scene">
+        <div class="sceneHeader">
+          <h3>Exhibit Wall</h3>
+          <span>Click the artifact that matches your clue</span>
+        </div>
+        <div class="clueBox">
+          <div class="clueLabel">Your Clue</div>
+          <div class="clueText" id="clueText">Loading...</div>
+          <div class="clueCategory" id="clueCategory"></div>
+        </div>
+        <div class="galleryWall">
+          <div class="cardsGrid" id="wall"></div>
+        </div>
+        <p class="sceneTip">Tip: wrong clicks just mean "try again" - careful observation earns more points.</p>
+      </div>
+
+      <div class="side">
+        <div class="panel">
+          <h2>Your Backpack</h2>
+          <p class="small" style="margin-bottom:10px;">A card is collected each time you find the right artifact.</p>
+          <div class="list" id="backpack"></div>
+        </div>
+        <div class="teacherNote">
+          <b>Teacher Note</b>
+          Images are served from ROM's online collection previews. Review ROM's usage terms before publishing in external classroom materials.
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modalTop">
+      <img class="mainImg" id="modalImg" alt="Artifact image" />
+      <div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalSubtitle"></p>
+        <div class="pointsBadge" id="pointsBadge">+100 pts</div>
+      </div>
+    </div>
+    <div class="modalBody">
+      <div class="callout" id="modalTextCallout"></div>
+      <div class="callout" id="modalVocabCallout"></div>
+      <div class="callout" id="modalQuestionCallout"></div>
+    </div>
+    <div class="modalActions">
+      <div class="link" id="modalLink"></div>
+      <button class="btnPrimary" id="btnClose">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="lbBackdrop" id="lbBackdrop" role="dialog" aria-modal="true" aria-label="Leaderboard">
+  <div class="lbModal">
+    <div class="lbHeader">
+      <div>
+        <h2>Hall of Fame</h2>
+        <div class="lbSubtitle">Top 50 scores - all players, all time</div>
+      </div>
+      <button class="btnGhost" id="btnCloseLb" style="font-size:18px; padding:4px 9px;">x</button>
+    </div>
+    <div class="lbFilters" id="lbFilters"></div>
+    <div class="lbTable">
+      <div id="lbContent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = [
+  {
+    key: "egypt",
+    period: "Ancient Egypt",
+    items: [
+      {
+        id: "egypt_boat",
+        title: "Funerary boat model",
+        category: "Transportation",
+        clue: "Find the object that shows how people traveled and moved goods along a great river.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/20496/preview",
+        source: "https://collections.rom.on.ca/objects/185269",
+        popup: {
+          subtitle: "Transportation - River life",
+          text: "The Nile was like a highway. Boats helped people travel and transport food, supplies, and trade goods across the kingdom.",
+          vocab: "River transport - using waterways to move people or goods from place to place.",
+          question: "Why would a river be useful for trade and travel compared to travelling by land?"
+        }
+      },
+      {
+        id: "egypt_offering_table",
+        title: "Offering table",
+        category: "Food & Beliefs",
+        clue: "Find the flat stone object that held food and drink offerings for the deceased.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/404760/preview",
+        source: "https://collections.rom.on.ca/objects/182321",
+        popup: {
+          subtitle: "Food - Beliefs - Death rituals",
+          text: "Egyptians left offerings in tombs to support the deceased in the afterlife. Even carved or painted food could symbolically count as a real offering.",
+          vocab: "Offering - a gift given as part of a religious or funerary ceremony, often food, drink, or objects.",
+          question: "What does leaving food for the dead tell us about Egyptian beliefs about the afterlife?"
+        }
+      },
+      {
+        id: "egypt_granary",
+        title: "Tomb model of a granary",
+        category: "Jobs & Economy",
+        clue: "Find the model that shows workers storing and counting grain, organized by a scribe.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/414132/preview",
+        source: "https://collections.rom.on.ca/objects/195996",
+        popup: {
+          subtitle: "Jobs - Economy - Hierarchy",
+          text: "Granaries stored wheat and barley. Workers carried sacks of grain while scribes counted and recorded everything - showing organized labour and central planning.",
+          vocab: "Granary - a storehouse for grain, a critical part of any ancient agricultural economy.",
+          question: "Why would a ruler want control over how grain was stored and distributed?"
+        }
+      },
+      {
+        id: "egypt_shabti",
+        title: "Shabti figurine (Shak-sha)",
+        category: "Spiritual Beliefs",
+        clue: "Find the small human-shaped figure that was meant to work on behalf of the dead.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/502671/preview",
+        source: "https://collections.rom.on.ca/objects/195842",
+        popup: {
+          subtitle: "Beliefs - Afterlife - Magic",
+          text: "Shabtis were placed in tombs to magically perform labour for the dead in the afterlife. Wealthy Egyptians could afford hundreds of them - one for every day of the year.",
+          vocab: "Afterlife - the belief that some form of existence continues after death.",
+          question: "What does the number of shabtis placed in a tomb tell us about social status?"
+        }
+      },
+      {
+        id: "egypt_canopic",
+        title: "Canopic jar",
+        category: "Spiritual Beliefs",
+        clue: "Find the jar with a special lid shaped like a head, used to store preserved organs.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/168432/preview",
+        source: "https://collections.rom.on.ca/objects/182456",
+        popup: {
+          subtitle: "Beliefs - Death - Preservation",
+          text: "During mummification, organs like the liver, lungs, stomach, and intestines were removed and stored in canopic jars. The lids showed the four sons of Horus, each protecting a different organ.",
+          vocab: "Mummification - the process of preserving a body after death so the soul could return to it.",
+          question: "What does the care taken to preserve organs tell you about Egyptian beliefs about the body?"
+        }
+      },
+      {
+        id: "egypt_stele",
+        title: "Funerary stele (carved stone slab)",
+        category: "Writing & Records",
+        clue: "Find the upright carved stone inscribed with hieroglyphics to honor or record a person.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/209876/preview",
+        source: "https://collections.rom.on.ca/objects/195432",
+        popup: {
+          subtitle: "Communication - History - Power",
+          text: "Stelae were carved with hieroglyphics to record names, titles, prayers, and important events. They were permanent public records - meant to last forever.",
+          vocab: "Stele - an upright stone slab carved with inscriptions or images, used as a monument or grave marker.",
+          question: "Why might leaders choose stone rather than papyrus to record important information?"
+        }
+      }
+    ],
+    layout: [
+      { id: "egypt_boat", col: "1 / span 7", row: "1 / span 3" },
+      { id: "egypt_granary", col: "8 / span 5", row: "1 / span 2" },
+      { id: "egypt_offering_table", col: "8 / span 5", row: "3 / span 2" },
+      { id: "egypt_shabti", col: "1 / span 3", row: "4 / span 2" },
+      { id: "egypt_canopic", col: "4 / span 4", row: "4 / span 2" },
+      { id: "egypt_stele", col: "8 / span 5", row: "5 / span 2" }
+    ]
+  },
+  {
+    key: "greece",
+    period: "Ancient Greece",
+    items: [
+      {
+        id: "greece_amphora",
+        title: "Attic black-figure amphora",
+        category: "Food & Trade",
+        clue: "Find the large two-handled container used to store and ship olive oil or wine.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/435626/preview",
+        source: "https://collections.rom.on.ca/objects/380907",
+        popup: {
+          subtitle: "Food - Trade - Beliefs",
+          text: "Amphorae stored and shipped goods like wine and oil across the Mediterranean. Many also depicted gods and mythological scenes, showing how everyday trade and religion were connected.",
+          vocab: "Amphora - a large two-handled pottery vessel used to store and transport goods, often sealed with a stopper.",
+          question: "Why would trade be easier for a civilization located along a sea or ocean coast?"
+        }
+      },
+      {
+        id: "greece_kylix",
+        title: "Kylix (shallow drinking cup)",
+        category: "Social Life",
+        clue: "Find the wide, shallow wine cup used at Greek dinner parties and social gatherings.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/443728/preview",
+        source: "https://collections.rom.on.ca/objects/380892",
+        popup: {
+          subtitle: "Food - Social customs - Ideas",
+          text: "The kylix was used at symposia - social gatherings where men drank wine, debated philosophy, and listened to poetry. Decorated with mythological scenes, it combined art with daily life.",
+          vocab: "Symposium - a Greek gathering or dinner party where wine was shared, ideas were debated, and speeches were given.",
+          question: "Why might sharing food and drink be important for building a community or democracy?"
+        }
+      },
+      {
+        id: "greece_lekythos",
+        title: "White-ground lekythos (oil flask)",
+        category: "Spiritual Beliefs",
+        clue: "Find the slim, painted flask placed at graves and used to honor the dead with oil.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/467892/preview",
+        source: "https://collections.rom.on.ca/objects/381234",
+        popup: {
+          subtitle: "Beliefs - Death - Ritual",
+          text: "Lekythoi were oil flasks left at graves or used in burial rites. White-ground ones often show mourning scenes and images of the underworld, giving insight into Greek beliefs about death.",
+          vocab: "Ritual - a set of actions performed for religious or ceremonial purposes, often repeated in the same way.",
+          question: "How are Greek burial practices similar to or different from Egyptian ones? What might explain the similarities?"
+        }
+      },
+      {
+        id: "greece_figurine",
+        title: "Terracotta female figurine",
+        category: "Spiritual Beliefs",
+        clue: "Find the small mass-produced clay figure likely left as an offering at a temple.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/512043/preview",
+        source: "https://collections.rom.on.ca/objects/379876",
+        popup: {
+          subtitle: "Beliefs - Daily life - Craftsmanship",
+          text: "Terracotta figurines were inexpensively made in moulds and used as offerings to the gods, as children's toys, or as grave goods. Their wide availability tells us ordinary people participated in religious life.",
+          vocab: "Votive offering - a gift left at a temple or shrine as thanks to a god, or in exchange for a favour.",
+          question: "Why might ordinary people use inexpensive clay figurines rather than gold or silver offerings?"
+        }
+      },
+      {
+        id: "greece_coin",
+        title: "Athenian silver tetradrachm",
+        category: "Trade & Economy",
+        clue: "Find the small stamped metal disc bearing a goddess and an owl, used as currency.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/389201/preview",
+        source: "https://collections.rom.on.ca/objects/380127",
+        popup: {
+          subtitle: "Economy - Trade - Symbols of power",
+          text: "Athenian coins showed the goddess Athena on one side and an owl on the other. Widely trusted across the Mediterranean, they made long-distance trade between cities much easier and more reliable.",
+          vocab: "Currency - a system of money accepted by a group of people for buying and selling goods and services.",
+          question: "How does having a widely accepted shared currency help different cities or countries trade with each other?"
+        }
+      }
+    ],
+    layout: [
+      { id: "greece_amphora", col: "1 / span 5", row: "1 / span 3" },
+      { id: "greece_kylix", col: "6 / span 7", row: "1 / span 2" },
+      { id: "greece_lekythos", col: "6 / span 4", row: "3 / span 2" },
+      { id: "greece_figurine", col: "1 / span 4", row: "4 / span 2" },
+      { id: "greece_coin", col: "10 / span 3", row: "3 / span 3" }
+    ]
+  },
+  {
+    key: "china",
+    period: "Ancient China",
+    items: [
+      {
+        id: "china_horse",
+        title: "Burial figure of a horse",
+        category: "Transportation",
+        clue: "Find the animal that carried riders and goods across vast distances, placed in a tomb.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/216260/preview",
+        source: "https://collections.rom.on.ca/objects/318712",
+        popup: {
+          subtitle: "Transportation - Status - Daily life",
+          text: "Horses made travel and communication faster and helped move trade goods across China. They also represented status - wealthy nobles and generals were buried with horse figures to show their rank.",
+          vocab: "Caravan - a group of merchants or travelers journeying together, often using animals to carry heavy loads.",
+          question: "How does faster transportation change how a society trades, communicates, and fights wars?"
+        }
+      },
+      {
+        id: "china_bronze",
+        title: "Bronze ritual vessel (Hu)",
+        category: "Spiritual Beliefs",
+        clue: "Find the elaborately decorated metal container used in ceremonies to honor ancestors.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/103847/preview",
+        source: "https://collections.rom.on.ca/objects/318432",
+        popup: {
+          subtitle: "Beliefs - Power - Craftsmanship",
+          text: "Bronze vessels were cast with intricate taotie (monster mask) designs and used in rituals honoring ancestors. Owning large numbers of fine bronze vessels showed a ruler's wealth and connection to divine power.",
+          vocab: "Ancestor veneration - the practice of honoring and giving offerings to deceased family members, seeking their guidance and protection.",
+          question: "Why might a ruler want to display elaborate bronze vessels during religious ceremonies?"
+        }
+      },
+      {
+        id: "china_jade",
+        title: "Jade bi disc",
+        category: "Spiritual Beliefs",
+        clue: "Find the flat ring of polished green stone associated with heaven and eternal life.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/87654/preview",
+        source: "https://collections.rom.on.ca/objects/317890",
+        popup: {
+          subtitle: "Beliefs - Status - Materials",
+          text: "Jade was the most precious material in ancient China, associated with immortality, heaven, and virtue. Bi discs were placed on or near the body in tombs to help the soul travel to the heavenly realm.",
+          vocab: "Jade - a hard, precious stone highly valued in China for its beauty, rarity, and spiritual meaning.",
+          question: "What might owning jade jewellery or objects suggest about the person who owned them?"
+        }
+      },
+      {
+        id: "china_camel",
+        title: "Tang dynasty burial camel",
+        category: "Trade & The Silk Road",
+        clue: "Find the desert animal that carried goods along the famous trade route between East and West.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/221543/preview",
+        source: "https://collections.rom.on.ca/objects/318965",
+        popup: {
+          subtitle: "Trade - Transportation - Silk Road",
+          text: "Camels were the essential carriers on the Silk Road, able to travel days without water. Tang dynasty tomb figures of camels reflect how central long-distance trade was to Chinese prosperity and culture.",
+          vocab: "Silk Road - an ancient network of trade routes connecting China with Central Asia, the Middle East, and eventually Europe.",
+          question: "What kinds of goods do you think traveled in each direction along the Silk Road?"
+        }
+      },
+      {
+        id: "china_ceramic",
+        title: "Glazed ceramic storage jar",
+        category: "Technology & Trade",
+        clue: "Find the watertight vessel that shows advanced pottery-making techniques used for storage and export.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/318920/preview",
+        source: "https://collections.rom.on.ca/objects/319104",
+        popup: {
+          subtitle: "Technology - Daily life - Trade",
+          text: "Chinese potters developed glazing techniques that made vessels watertight, durable, and beautiful. These jars stored food, liquids, and trade goods, and were widely exported across Asia along the Silk Road.",
+          vocab: "Glaze - a glassy coating applied to pottery before firing, making it waterproof and giving it a smooth, decorative finish.",
+          question: "Why would durable, waterproof containers be especially important for merchants on long trade journeys?"
+        }
+      }
+    ],
+    layout: [
+      { id: "china_horse", col: "1 / span 7", row: "1 / span 2" },
+      { id: "china_bronze", col: "8 / span 5", row: "1 / span 2" },
+      { id: "china_camel", col: "1 / span 5", row: "3 / span 3" },
+      { id: "china_jade", col: "6 / span 4", row: "3 / span 2" },
+      { id: "china_ceramic", col: "10 / span 3", row: "3 / span 2" }
+    ]
+  },
+  {
+    key: "england",
+    period: "Roman Britain",
+    items: [
+      {
+        id: "england_fibula",
+        title: "Trumpet fibula (brooch)",
+        category: "Clothing",
+        clue: "Find the decorative metal fastener used to pin clothing - like an ancient safety pin.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/697485/preview",
+        source: "https://collections.rom.on.ca/objects/345708",
+        popup: {
+          subtitle: "Clothing - Materials - Status",
+          text: "Brooches (fibulae) fastened cloaks and tunics. More elaborate ones signalled higher status. Finding a fine brooch in Britain shows how Roman fashion and craftsmanship spread far beyond Italy.",
+          vocab: "Fibula - the Latin word for a clasp or brooch; a practical and decorative fastener used across the Roman world.",
+          question: "What might a very elaborate or jewelled brooch suggest about the person wearing it?"
+        }
+      },
+      {
+        id: "england_beaker",
+        title: "Beaker (Nene Valley colour-coated ware)",
+        category: "Food & Drink",
+        clue: "Find the cup-shaped vessel for drinking, showing pottery technology that spread across Roman Britain.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/510705/preview",
+        source: "https://collections.rom.on.ca/objects/396423",
+        popup: {
+          subtitle: "Food - Home life - Technology",
+          text: "Colour-coated beakers from the Nene Valley were produced in large quantities and traded across Roman Britain. Their consistent style shows industrial-scale pottery production and a connected Roman economy.",
+          vocab: "Pottery - objects shaped from clay and hardened by heat, one of the earliest human technologies.",
+          question: "Why do archaeologists say that broken pots are among the most useful things they find at a dig site?"
+        }
+      },
+      {
+        id: "england_coin",
+        title: "Roman bronze coin (as)",
+        category: "Economy & Trade",
+        clue: "Find the small metal disc stamped with a Roman emperor's face used to pay for goods.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/498321/preview",
+        source: "https://collections.rom.on.ca/objects/396128",
+        popup: {
+          subtitle: "Economy - Roman power - Propaganda",
+          text: "Roman coins bore the emperor's portrait, spreading his image and legitimacy across the empire. Even in distant Britain, coins paid for taxes, soldiers' wages, and everyday goods, tying local life to Rome.",
+          vocab: "Propaganda - information spread to promote a leader or political idea, often on coins, monuments, or public buildings.",
+          question: "Why would putting the emperor's face on every coin be useful for Roman political control?"
+        }
+      },
+      {
+        id: "england_lamp",
+        title: "Roman terracotta oil lamp",
+        category: "Technology & Daily Life",
+        clue: "Find the small clay object filled with olive oil to provide light in homes and temples.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/534109/preview",
+        source: "https://collections.rom.on.ca/objects/396089",
+        popup: {
+          subtitle: "Technology - Home life - Trade",
+          text: "Oil lamps were the main source of artificial light in Roman homes, temples, and streets. Made in moulds, they were mass-produced, affordable, and often decorated with mythological scenes.",
+          vocab: "Mass production - making large quantities of identical goods efficiently using moulds or repeated processes.",
+          question: "How might having reliable indoor lighting change people's daily routines and activities after dark?"
+        }
+      },
+      {
+        id: "england_mirror",
+        title: "Bronze hand mirror",
+        category: "Clothing & Appearance",
+        clue: "Find the polished metal object that shows Roman Britons cared about personal grooming.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/567834/preview",
+        source: "https://collections.rom.on.ca/objects/345891",
+        popup: {
+          subtitle: "Daily life - Appearance - Cultural exchange",
+          text: "Polished bronze mirrors were Roman luxury items. Finding them in Britain shows that Roman habits around personal grooming and appearance had spread to the province, far from Rome itself.",
+          vocab: "Cultural diffusion - the spread of ideas, customs, technologies, and practices from one culture to another through trade or conquest.",
+          question: "What does the presence of luxury grooming items tell us about the spread of Roman culture in Britain?"
+        }
+      }
+    ],
+    layout: [
+      { id: "england_beaker", col: "1 / span 5", row: "1 / span 3" },
+      { id: "england_fibula", col: "6 / span 7", row: "1 / span 2" },
+      { id: "england_coin", col: "6 / span 4", row: "3 / span 2" },
+      { id: "england_lamp", col: "1 / span 4", row: "4 / span 2" },
+      { id: "england_mirror", col: "10 / span 3", row: "3 / span 2" }
+    ]
+  }
+];
+
+let currentPeriodKey = null;
+let found = new Set();
+let wrongAttemptsMap = new Map();
+let sessionScore = 0;
+let lastFocusedEl = null;
+let allScores = [];
+let lbFilterPeriod = "all";
+let activePlayerName = "";
+let scoreSavedForRun = false;
+
+const storageKey = "lb_scores";
+const hasStorage = typeof window.localStorage !== "undefined";
+
+const nameSelectEl = document.getElementById("nameSelect");
+const scoreChip = document.getElementById("scoreChip");
+const scoreDisplay = document.getElementById("scoreDisplay");
+const periodButtonsEl = document.getElementById("periodButtons");
+const startPanel = document.getElementById("startPanel");
+const gamePanel = document.getElementById("gamePanel");
+const sceneWrap = document.getElementById("sceneWrap");
+const statusPill = document.getElementById("statusPill");
+const periodPill = document.getElementById("periodPill");
+const foundCountEl = document.getElementById("foundCount");
+const totalCountEl = document.getElementById("totalCount");
+const progressFill = document.getElementById("progressFill");
+const clueTextEl = document.getElementById("clueText");
+const clueCategoryEl = document.getElementById("clueCategory");
+const wallEl = document.getElementById("wall");
+const backpackEl = document.getElementById("backpack");
+const toastEl = document.getElementById("toast");
+const winBanner = document.getElementById("winBanner");
+const winScoreEl = document.getElementById("winScore");
+const winPctEl = document.getElementById("winPct");
+const noNameWarning = document.getElementById("noNameWarning");
+
+const modalBackdrop = document.getElementById("modalBackdrop");
+const modalImg = document.getElementById("modalImg");
+const modalTitle = document.getElementById("modalTitle");
+const modalSubtitle = document.getElementById("modalSubtitle");
+const pointsBadge = document.getElementById("pointsBadge");
+const modalTextCallout = document.getElementById("modalTextCallout");
+const modalVocabCallout = document.getElementById("modalVocabCallout");
+const modalQuestionCallout = document.getElementById("modalQuestionCallout");
+const modalLink = document.getElementById("modalLink");
+const btnClose = document.getElementById("btnClose");
+
+const lbBackdrop = document.getElementById("lbBackdrop");
+const lbFiltersEl = document.getElementById("lbFilters");
+const lbContentEl = document.getElementById("lbContent");
+
+function getPeriod(key) { return DATA.find(p => p.key === key); }
+function getPlayerName() { return nameSelectEl.value; }
+function getPeriodLabel(key) {
+  const period = getPeriod(key);
+  return period ? period.period : key;
+}
+
+let toastTimer;
+function toast(msg, ok = true) {
+  clearTimeout(toastTimer);
+  toastEl.textContent = msg;
+  toastEl.style.borderColor = ok ? "rgba(52,211,153,.32)" : "rgba(248,113,113,.4)";
+  toastEl.classList.add("show");
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1500);
+}
+
+function itemPoints(itemId) {
+  const wrong = wrongAttemptsMap.get(itemId) || 0;
+  return Math.max(10, 100 - wrong * 20);
+}
+
+function maxPossibleScore(period) { return period.items.length * 100; }
+
+function updateHud() {
+  const p = getPeriod(currentPeriodKey);
+  const n = found.size;
+  const total = p.items.length;
+
+  foundCountEl.textContent = String(n);
+  totalCountEl.textContent = String(total);
+  progressFill.style.width = total > 0 ? `${(n / total) * 100}%` : "0%";
+  statusPill.textContent = `${p.period}: ${n}/${total} found`;
+  periodPill.textContent = p.period;
+  scoreDisplay.textContent = sessionScore;
+
+  backpackEl.innerHTML = "";
+  for (const item of p.items) {
+    const done = found.has(item.id);
+    const div = document.createElement("div");
+    div.className = "badge" + (done ? " done" : "");
+    div.textContent = (done ? "✓ " : "- ") + `${item.category}: ${item.title}`;
+    backpackEl.appendChild(div);
+  }
+
+  const allDone = n === total;
+  if (allDone) {
+    winBanner.classList.add("show");
+    const pct = Math.round((sessionScore / maxPossibleScore(p)) * 100);
+    winScoreEl.textContent = `${sessionScore} pts`;
+    winPctEl.textContent = `${pct}% accuracy score`;
+    sceneWrap.style.display = "none";
+    if (!scoreSavedForRun) {
+      saveScore(p, pct);
+      scoreSavedForRun = true;
+    }
+  } else {
+    winBanner.classList.remove("show");
+    sceneWrap.style.display = "";
+  }
+}
+
+function buildWall() {
+  const p = getPeriod(currentPeriodKey);
+  wallEl.innerHTML = "";
+  const layoutById = new Map(p.layout.map(x => [x.id, x]));
+
+  for (const item of p.items) {
+    const layout = layoutById.get(item.id);
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "artCard";
+    card.setAttribute("aria-label", item.title);
+    if (layout) {
+      card.style.gridColumn = layout.col;
+      card.style.gridRow = layout.row;
+    }
+
+    const img = document.createElement("img");
+    img.alt = item.title;
+    img.loading = "lazy";
+    img.referrerPolicy = "no-referrer";
+    img.src = item.img;
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = item.title;
+
+    card.appendChild(img);
+    card.appendChild(label);
+    card.addEventListener("click", () => onCardClick(item, card));
+    wallEl.appendChild(card);
+  }
+}
+
+function nextClue() {
+  const p = getPeriod(currentPeriodKey);
+  const remaining = p.items.filter(it => !found.has(it.id));
+  if (remaining.length === 0) {
+    clueTextEl.textContent = "All artifacts found!";
+    clueCategoryEl.textContent = "";
+    delete clueTextEl.dataset.targetId;
+    return;
+  }
+  const pick = remaining[Math.floor(Math.random() * remaining.length)];
+  clueTextEl.textContent = pick.clue;
+  clueCategoryEl.textContent = `Category: ${pick.category}`;
+  clueTextEl.dataset.targetId = pick.id;
+}
+
+function clearCardMarks() {
+  for (const node of wallEl.querySelectorAll(".artCard")) node.classList.remove("wrong");
+}
+
+function onCardClick(item, cardEl) {
+  const targetId = clueTextEl.dataset.targetId;
+  if (!targetId) return;
+  clearCardMarks();
+
+  if (item.id === targetId) {
+    const pts = itemPoints(item.id);
+    sessionScore += pts;
+    scoreDisplay.textContent = sessionScore;
+    found.add(item.id);
+    cardEl.classList.add("correct");
+    toast(`Found it! +${pts} pts`, true);
+    updateHud();
+    openModal(item, pts);
+  } else {
+    const prev = wrongAttemptsMap.get(targetId) || 0;
+    wrongAttemptsMap.set(targetId, prev + 1);
+    cardEl.classList.add("wrong");
+    toast("Not that one - look again.", false);
+  }
+}
+
+function makeImg(src, cls) {
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = cls;
+  img.referrerPolicy = "no-referrer";
+  img.alt = "";
+  img.onerror = () => img.remove();
+  return img;
+}
+
+function openModal(item, pts) {
+  lastFocusedEl = document.activeElement;
+
+  modalImg.src = item.img;
+  modalImg.referrerPolicy = "no-referrer";
+  modalTitle.textContent = item.title;
+  modalSubtitle.textContent = item.popup.subtitle;
+  pointsBadge.textContent = `+${pts} pts`;
+
+  modalTextCallout.innerHTML = "";
+  modalTextCallout.appendChild(makeImg(item.img, "calloutImg"));
+  const b1 = document.createElement("b");
+  b1.textContent = "What it tells us: ";
+  modalTextCallout.appendChild(b1);
+  modalTextCallout.appendChild(document.createTextNode(item.popup.text));
+
+  modalVocabCallout.innerHTML = "";
+  const b2 = document.createElement("b");
+  b2.textContent = "Word to know: ";
+  modalVocabCallout.appendChild(b2);
+  modalVocabCallout.appendChild(document.createTextNode(item.popup.vocab));
+
+  modalQuestionCallout.innerHTML = "";
+  const b3 = document.createElement("b");
+  b3.textContent = "Quick question: ";
+  modalQuestionCallout.appendChild(b3);
+  modalQuestionCallout.appendChild(document.createTextNode(item.popup.question));
+  modalQuestionCallout.appendChild(makeImg(item.img, "questionImg"));
+
+  modalLink.innerHTML = "";
+  modalLink.appendChild(document.createTextNode("Source: "));
+  const a = document.createElement("a");
+  a.href = item.source;
+  a.target = "_blank";
+  a.rel = "noreferrer";
+  a.textContent = "ROM collection page";
+  modalLink.appendChild(a);
+
+  modalBackdrop.classList.add("show");
+  requestAnimationFrame(() => requestAnimationFrame(() => modalBackdrop.classList.add("visible")));
+  btnClose.focus();
+}
+
+function closeModal() {
+  modalBackdrop.classList.remove("visible");
+  setTimeout(() => modalBackdrop.classList.remove("show"), 220);
+  nextClue();
+  if (lastFocusedEl && typeof lastFocusedEl.focus === "function") lastFocusedEl.focus();
+}
+
+async function loadScores() {
+  if (!hasStorage) return;
+  try {
+    const raw = window.localStorage.getItem(storageKey);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) allScores = parsed;
+    }
+  } catch (_e) {
+    allScores = [];
+  }
+}
+
+function normalizeScores() {
+  allScores = allScores.map(entry => {
+    const periodKey = entry.periodKey || DATA.find(d => d.period === entry.period)?.key || "";
+    const periodLabel = entry.periodLabel || getPeriodLabel(periodKey) || entry.period || "Unknown";
+    return {
+      name: String(entry.name || "Unknown"),
+      periodKey,
+      periodLabel,
+      score: Number(entry.score || 0),
+      pct: Number(entry.pct || 0),
+      total: Number(entry.total || 0),
+      date: String(entry.date || "")
+    };
+  });
+  allScores.sort((a, b) => b.pct - a.pct || b.score - a.score);
+  allScores = allScores.slice(0, 50);
+}
+
+function persistScores() {
+  if (!hasStorage) return;
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify(allScores));
+  } catch (e) {
+    console.error("Failed to save score:", e);
+  }
+}
+
+function saveScore(period, pct) {
+  const name = activePlayerName;
+  if (!name) return;
+
+  const entry = {
+    name,
+    periodKey: period.key,
+    periodLabel: period.period,
+    score: sessionScore,
+    pct,
+    total: period.items.length,
+    date: new Date().toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" })
+  };
+
+  allScores.push(entry);
+  normalizeScores();
+  persistScores();
+}
+
+function renderLbFilters() {
+  lbFiltersEl.innerHTML = "";
+  const filters = [{ key: "all", label: "All Periods" }, ...DATA.map(d => ({ key: d.key, label: d.period }))];
+  for (const f of filters) {
+    const btn = document.createElement("button");
+    btn.className = "lbFilter" + (lbFilterPeriod === f.key ? " active" : "");
+    btn.textContent = f.label;
+    btn.onclick = () => {
+      lbFilterPeriod = f.key;
+      renderLbFilters();
+      renderLbTable();
+    };
+    lbFiltersEl.appendChild(btn);
+  }
+}
+
+function makePctBar(pct) {
+  const wrap = document.createElement("div");
+  wrap.className = "pctBar";
+
+  const track = document.createElement("div");
+  track.className = "pctBarTrack";
+  const fill = document.createElement("div");
+  fill.className = "pctBarFill";
+  fill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+  track.appendChild(fill);
+
+  const label = document.createElement("span");
+  label.style.fontSize = "12px";
+  label.style.fontWeight = "600";
+  label.style.color = "var(--good)";
+  label.style.minWidth = "36px";
+  label.textContent = `${pct}%`;
+
+  wrap.appendChild(track);
+  wrap.appendChild(label);
+  return wrap;
+}
+
+function renderLbTable() {
+  const currentName = activePlayerName || getPlayerName();
+  const filtered = lbFilterPeriod === "all"
+    ? allScores
+    : allScores.filter(s => s.periodKey === lbFilterPeriod);
+
+  lbContentEl.innerHTML = "";
+
+  if (filtered.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "lbEmpty";
+    empty.textContent = "No scores yet for this period. Be the first to play and get on the board!";
+    lbContentEl.appendChild(empty);
+    return;
+  }
+
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  ["#", "Name", "Period", "Accuracy", "Score", "Date"].forEach(text => {
+    const th = document.createElement("th");
+    th.textContent = text;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+
+  const tbody = document.createElement("tbody");
+  const medals = ["1", "2", "3"];
+
+  filtered.forEach((entry, i) => {
+    const tr = document.createElement("tr");
+    if (entry.name === currentName) tr.classList.add("myScore");
+
+    const rankTd = document.createElement("td");
+    if (i < 3) {
+      const medal = document.createElement("span");
+      medal.className = "medalIcon";
+      medal.textContent = medals[i];
+      rankTd.appendChild(medal);
+    } else {
+      const rank = document.createElement("span");
+      rank.style.color = "var(--muted)";
+      rank.style.fontSize = "12px";
+      rank.textContent = String(i + 1);
+      rankTd.appendChild(rank);
+    }
+
+    const nameTd = document.createElement("td");
+    const nameStrong = document.createElement("b");
+    nameStrong.textContent = entry.name;
+    nameTd.appendChild(nameStrong);
+
+    const periodTd = document.createElement("td");
+    periodTd.className = "muted";
+    periodTd.textContent = entry.periodLabel;
+
+    const pctTd = document.createElement("td");
+    pctTd.appendChild(makePctBar(entry.pct));
+
+    const scoreTd = document.createElement("td");
+    scoreTd.style.fontWeight = "600";
+    scoreTd.textContent = String(entry.score);
+
+    const dateTd = document.createElement("td");
+    dateTd.className = "muted";
+    dateTd.textContent = entry.date;
+
+    tr.appendChild(rankTd);
+    tr.appendChild(nameTd);
+    tr.appendChild(periodTd);
+    tr.appendChild(pctTd);
+    tr.appendChild(scoreTd);
+    tr.appendChild(dateTd);
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  lbContentEl.appendChild(table);
+}
+
+function openLeaderboard() {
+  lbFilterPeriod = currentPeriodKey || "all";
+  renderLbFilters();
+  renderLbTable();
+  lbBackdrop.classList.add("show");
+  requestAnimationFrame(() => requestAnimationFrame(() => lbBackdrop.classList.add("visible")));
+  document.getElementById("btnCloseLb").focus();
+}
+
+function closeLeaderboard() {
+  lbBackdrop.classList.remove("visible");
+  setTimeout(() => lbBackdrop.classList.remove("show"), 220);
+}
+
+function renderPeriodButtons() {
+  periodButtonsEl.innerHTML = "";
+  for (const p of DATA) {
+    const btn = document.createElement("button");
+    btn.className = "periodBtn";
+
+    const title = document.createElement("b");
+    title.textContent = p.period;
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = `${p.items.length} artifacts to find`;
+    btn.appendChild(title);
+    btn.appendChild(meta);
+
+    btn.addEventListener("click", () => {
+      if (!getPlayerName()) {
+        noNameWarning.classList.add("show");
+        return;
+      }
+      noNameWarning.classList.remove("show");
+      startPeriod(p.key);
+    });
+    periodButtonsEl.appendChild(btn);
+  }
+}
+
+function startPeriod(key) {
+  activePlayerName = getPlayerName();
+  currentPeriodKey = key;
+  found = new Set();
+  wrongAttemptsMap = new Map();
+  sessionScore = 0;
+  scoreSavedForRun = false;
+  scoreDisplay.textContent = "0";
+  scoreChip.style.display = "flex";
+  winBanner.classList.remove("show");
+  sceneWrap.style.display = "";
+  startPanel.style.display = "none";
+  gamePanel.style.display = "block";
+  buildWall();
+  updateHud();
+  nextClue();
+}
+
+function trapFocus(e, container) {
+  if (e.key !== "Tab") return;
+  const focusables = container.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
+nameSelectEl.addEventListener("change", () => {
+  if (nameSelectEl.value) noNameWarning.classList.remove("show");
+});
+
+document.getElementById("btnBack").addEventListener("click", () => {
+  gamePanel.style.display = "none";
+  startPanel.style.display = "block";
+  scoreChip.style.display = "none";
+  statusPill.textContent = "Choose a period to start";
+  currentPeriodKey = null;
+  activePlayerName = "";
+  scoreSavedForRun = false;
+});
+
+document.getElementById("btnNewClue").addEventListener("click", nextClue);
+document.getElementById("btnReset").addEventListener("click", () => {
+  found = new Set();
+  wrongAttemptsMap = new Map();
+  sessionScore = 0;
+  scoreSavedForRun = false;
+  scoreDisplay.textContent = "0";
+  winBanner.classList.remove("show");
+  sceneWrap.style.display = "";
+  buildWall();
+  updateHud();
+  nextClue();
+  toast("Reset!", true);
+});
+
+btnClose.addEventListener("click", closeModal);
+modalBackdrop.addEventListener("click", e => {
+  if (e.target === modalBackdrop) closeModal();
+});
+
+document.getElementById("btnOpenLb").addEventListener("click", openLeaderboard);
+document.getElementById("btnCloseLb").addEventListener("click", closeLeaderboard);
+lbBackdrop.addEventListener("click", e => {
+  if (e.target === lbBackdrop) closeLeaderboard();
+});
+
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    if (modalBackdrop.classList.contains("show")) closeModal();
+    if (lbBackdrop.classList.contains("show")) closeLeaderboard();
+  }
+  if (modalBackdrop.classList.contains("show")) trapFocus(e, modalBackdrop);
+  if (lbBackdrop.classList.contains("show")) trapFocus(e, lbBackdrop);
+});
+
+(async () => {
+  await loadScores();
+  normalizeScores();
+  renderPeriodButtons();
+})();
+</script>
+</body>
+</html>
