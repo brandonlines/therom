@@ -491,6 +491,60 @@
     }
 
     .callout::after { content: ''; display: table; clear: both; }
+
+    /* Grade 4 friendly theme + readability overrides */
+    :root {
+      --bg: #f1f8ff;
+      --panel: #ffffff;
+      --card: #ffffff;
+      --text: #14213d;
+      --muted: #4f6288;
+      --good: #1f9d55;
+      --bad: #c73e45;
+      --accent: #2563eb;
+      --gold: #a66a00;
+      --gold-dim: rgba(166, 106, 0, .14);
+    }
+    body {
+      font-size: 18px;
+      line-height: 1.5;
+      background:
+        radial-gradient(ellipse 980px 520px at 12% 0%, rgba(96,165,250,.22) 0%, transparent 65%),
+        radial-gradient(ellipse 620px 420px at 90% 95%, rgba(74,222,128,.18) 0%, transparent 62%),
+        var(--bg);
+      color: var(--text);
+    }
+    header {
+      background: rgba(255,255,255,.72);
+      border-bottom: 1px solid rgba(37,99,235,.16);
+      backdrop-filter: blur(6px);
+    }
+    .brand h1 { font-size: 34px; letter-spacing: .2px; }
+    .brand p, .pill, .playerWrap label, .lbHeader .lbSubtitle, .sceneTip, .clueCategory { font-size: 15px; }
+    .playerWrap, .scoreChip, .pill { border-radius: 12px; }
+    .playerWrap select, button, .periodBtn, .btnPrimary, .btnGhost { font-size: 17px; }
+    .panel, .scene, .teacherNote, .galleryWall, .modal, .lbModal {
+      background: #ffffff;
+      border-color: #c8d9f4;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, .10);
+      color: var(--text);
+    }
+    .panel h2 { font-size: 14px; letter-spacing: .7px; color: #2f4f8f; }
+    .panel .big { font-size: 26px; }
+    .panel .small, .teacherNote, .meter, .badge, .link, .lbFilter { font-size: 16px; color: #304c82; }
+    .sceneHeader h3 { font-size: 30px; }
+    .sceneHeader span { font-size: 15px; }
+    .clueLabel { font-size: 14px; }
+    .clueText { font-size: 30px; line-height: 1.35; }
+    .artCard .label { font-size: 14px; padding: 6px 10px; border-radius: 10px; }
+    .winBanner h3 { font-size: 34px; }
+    .winBanner .winScore { font-size: 42px; }
+    .modalTop h3 { font-size: 30px; }
+    .modalTop p, .pointsBadge, .callout, .toast, tbody td, thead th { font-size: 16px; }
+    .lbFilter { padding: 8px 12px; border-radius: 10px; }
+    .clueBox, .teacherNote, .callout, .modalActions, .lbHeader { border-color: #d7e4fb; }
+    .btnPrimary { background: rgba(37,99,235,.10); border-color: rgba(37,99,235,.28); color: #143a8b; }
+    .btnGhost { background: rgba(255,255,255,.75); border-color: rgba(20,58,139,.20); }
   </style>
 </head>
 
@@ -714,6 +768,46 @@ const DATA = [
           vocab: "Stele - an upright stone slab carved with inscriptions or images, used as a monument or grave marker.",
           question: "Why might leaders choose stone rather than papyrus to record important information?"
         }
+      },
+      {
+        id: "egypt_canopic_lid",
+        title: "Canopic jar lid",
+        category: "Beliefs & Burial",
+        clue: "Find the canopic lid used in mummification rituals.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/597163/preview",
+        source: "https://collections.rom.on.ca/objects/187659"
+      },
+      {
+        id: "egypt_shabti_king",
+        title: "Shabti of King Anlamani",
+        category: "Beliefs & Burial",
+        clue: "Find the royal shabti figure placed in a tomb for the afterlife.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/28673/preview",
+        source: "https://collections.rom.on.ca/objects/187662"
+      },
+      {
+        id: "egypt_scarab",
+        title: "Scarab",
+        category: "Symbols & Beliefs",
+        clue: "Find the small scarab object linked to protection and rebirth.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/404384/preview",
+        source: "https://collections.rom.on.ca/objects/497966"
+      },
+      {
+        id: "egypt_kitten_coffin",
+        title: "Head of a coffin for a kitten",
+        category: "Animals & Beliefs",
+        clue: "Find the object connected to animal mummification in Egypt.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/414034/preview",
+        source: "https://collections.rom.on.ca/objects/196684"
+      },
+      {
+        id: "egypt_stele_min",
+        title: "Stele of Min, Aperetset and Kolanthes",
+        category: "Writing & Records",
+        clue: "Find the stele that records names and important messages in stone.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/404777/preview",
+        source: "https://collections.rom.on.ca/objects/182383"
       }
     ],
     layout: [
@@ -798,6 +892,54 @@ const DATA = [
           vocab: "Currency - a system of money accepted by a group of people for buying and selling goods and services.",
           question: "How does having a widely accepted shared currency help different cities or countries trade with each other?"
         }
+      },
+      {
+        id: "greece_kylix_boxing",
+        title: "Attic red-figure kylix with a boxing scene",
+        category: "Social Life",
+        clue: "Find the painted drinking cup showing people at a social gathering.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/435050/preview",
+        source: "https://collections.rom.on.ca/objects/349771"
+      },
+      {
+        id: "greece_lekythos_palmettes",
+        title: "Attic black-figure lekythos",
+        category: "Beliefs & Ritual",
+        clue: "Find the lekythos (oil flask) decorated with palmette patterns.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/435601/preview",
+        source: "https://collections.rom.on.ca/objects/337822"
+      },
+      {
+        id: "greece_krater",
+        title: "South Daunian bichrome krater",
+        category: "Food & Drink",
+        clue: "Find the large vessel used for mixing liquids in group meals.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/21461/preview",
+        source: "https://collections.rom.on.ca/objects/374047"
+      },
+      {
+        id: "greece_hydria",
+        title: "Hadra hydria (cinerary urn)",
+        category: "Water & Ritual",
+        clue: "Find the hydria vessel originally used as a cinerary urn.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/466157/preview",
+        source: "https://collections.rom.on.ca/objects/406483"
+      },
+      {
+        id: "greece_skyphos",
+        title: "Attic black-figure skyphos",
+        category: "Food & Drink",
+        clue: "Find the deep cup (skyphos) decorated with a sphinx scene.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/434903/preview",
+        source: "https://collections.rom.on.ca/objects/403455"
+      },
+      {
+        id: "greece_oinochoe",
+        title: "East Greek oinochoe",
+        category: "Food & Drink",
+        clue: "Find the pouring jug called an oinochoe.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/446941/preview",
+        source: "https://collections.rom.on.ca/objects/398537"
       }
     ],
     layout: [
@@ -881,6 +1023,54 @@ const DATA = [
           vocab: "Glaze - a glassy coating applied to pottery before firing, making it waterproof and giving it a smooth, decorative finish.",
           question: "Why would durable, waterproof containers be especially important for merchants on long trade journeys?"
         }
+      },
+      {
+        id: "china_bi_disc_2",
+        title: "Bi disc",
+        category: "Beliefs & Materials",
+        clue: "Find the circular jade-style bi disc linked to rituals and status.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/234326/preview",
+        source: "https://collections.rom.on.ca/objects/354663"
+      },
+      {
+        id: "china_hu_vessel_1",
+        title: "Hu wine vessel",
+        category: "Beliefs & Ceremonies",
+        clue: "Find the hu vessel used in ritual ceremonies.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/2187/preview",
+        source: "https://collections.rom.on.ca/objects/331022"
+      },
+      {
+        id: "china_hu_vessel_2",
+        title: "Hu wine vessel (painted)",
+        category: "Beliefs & Ceremonies",
+        clue: "Find the decorated hu vessel for storing or serving ritual wine.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/28124/preview",
+        source: "https://collections.rom.on.ca/objects/516838"
+      },
+      {
+        id: "china_bronze_mirror_peach",
+        title: "Peach-shaped bronze mirror",
+        category: "Daily Life & Design",
+        clue: "Find the peach-shaped bronze mirror.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/220539/preview",
+        source: "https://collections.rom.on.ca/objects/326719"
+      },
+      {
+        id: "china_bronze_mirror_flower",
+        title: "Flower-shaped bronze mirror",
+        category: "Daily Life & Design",
+        clue: "Find the flower-shaped bronze mirror.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/243367/preview",
+        source: "https://collections.rom.on.ca/objects/348572"
+      },
+      {
+        id: "china_mounted_archer",
+        title: "Burial figure of a mounted archer",
+        category: "Military & Transportation",
+        clue: "Find the figure of a rider on horseback ready for battle.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/1318/preview",
+        source: "https://collections.rom.on.ca/objects/518874"
       }
     ],
     layout: [
@@ -964,6 +1154,78 @@ const DATA = [
           vocab: "Cultural diffusion - the spread of ideas, customs, technologies, and practices from one culture to another through trade or conquest.",
           question: "What does the presence of luxury grooming items tell us about the spread of Roman culture in Britain?"
         }
+      },
+      {
+        id: "england_fibula_leech",
+        title: "Leech-type fibula",
+        category: "Clothing",
+        clue: "Find the leech-type fibula used to fasten clothing.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/9517/preview",
+        source: "https://collections.rom.on.ca/objects/343147"
+      },
+      {
+        id: "england_fibula_lion",
+        title: "Fibula with crouching lion",
+        category: "Clothing & Design",
+        clue: "Find the brooch decorated with a crouching lion.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/11434/preview",
+        source: "https://collections.rom.on.ca/objects/374096"
+      },
+      {
+        id: "england_fibula_crossbow",
+        title: "Cross-bow fibula",
+        category: "Clothing",
+        clue: "Find the cross-bow style fibula clasp.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/695850/preview",
+        source: "https://collections.rom.on.ca/objects/356759"
+      },
+      {
+        id: "england_samian_dish_42",
+        title: "Samian ware dish (Dragendorff 42)",
+        category: "Food & Home Life",
+        clue: "Find the Roman tableware dish made in samian ware.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/4688/preview",
+        source: "https://collections.rom.on.ca/objects/428725"
+      },
+      {
+        id: "england_samian_dish_22",
+        title: "Samian ware dish (Dragendorff 22)",
+        category: "Food & Home Life",
+        clue: "Find the second samian ware dish style.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/27471/preview",
+        source: "https://collections.rom.on.ca/objects/397934"
+      },
+      {
+        id: "england_spoon_ligula",
+        title: "Spoon of ligula type",
+        category: "Food & Home Life",
+        clue: "Find the small spoon used for serving or eating food.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/27812/preview",
+        source: "https://collections.rom.on.ca/objects/405194"
+      },
+      {
+        id: "england_ring_fortuna",
+        title: "Ring with intaglio of goddess Fortuna",
+        category: "Clothing & Beliefs",
+        clue: "Find the ring featuring the goddess Fortuna.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/14128/preview",
+        source: "https://collections.rom.on.ca/objects/338448"
+      },
+      {
+        id: "england_ring_serpent",
+        title: "Ring with intaglio of a seated figure",
+        category: "Clothing & Design",
+        clue: "Find the ring engraved with a seated figure holding a staff.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/27841/preview",
+        source: "https://collections.rom.on.ca/objects/353823"
+      },
+      {
+        id: "england_jug_handle",
+        title: "Jug with handle",
+        category: "Food & Drink",
+        clue: "Find the handled jug used to carry or pour liquids.",
+        img: "https://collections.rom.on.ca/internal/media/dispatcher/29231/preview",
+        source: "https://collections.rom.on.ca/objects/408955"
       }
     ],
     layout: [
@@ -1038,18 +1300,12 @@ function getPeriodLabel(key) {
 
 function buildQuestionQueue(period, totalQuestions) {
   if (!period || period.items.length === 0) return [];
-  const pool = period.items.map(item => item.id);
-  const queue = [];
-  let lastId = "";
-
-  while (queue.length < totalQuestions) {
-    const candidates = pool.length > 1 ? pool.filter(id => id !== lastId) : pool;
-    const pick = candidates[Math.floor(Math.random() * candidates.length)];
-    queue.push(pick);
-    lastId = pick;
+  const pool = [...new Set(period.items.map(item => item.id))];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-
-  return queue;
+  return pool.slice(0, Math.min(totalQuestions, pool.length));
 }
 
 let toastTimer;
@@ -1201,11 +1457,16 @@ function makeImg(src, cls) {
 
 function openModal(item, pts) {
   lastFocusedEl = document.activeElement;
+  const popup = item.popup || {};
+  const fallbackSubtitle = `${item.category} - Artifact study`;
+  const fallbackText = "This artifact gives clues about daily life, beliefs, technology, and trade in the past.";
+  const fallbackVocab = "artifact - an object made or used by people in the past.";
+  const fallbackQuestion = "What does this object help us learn about this society?";
 
   modalImg.src = item.img;
   modalImg.referrerPolicy = "no-referrer";
   modalTitle.textContent = item.title;
-  modalSubtitle.textContent = item.popup.subtitle;
+  modalSubtitle.textContent = popup.subtitle || fallbackSubtitle;
   pointsBadge.textContent = `+${pts} pts`;
 
   modalTextCallout.innerHTML = "";
@@ -1213,19 +1474,19 @@ function openModal(item, pts) {
   const b1 = document.createElement("b");
   b1.textContent = "What it tells us: ";
   modalTextCallout.appendChild(b1);
-  modalTextCallout.appendChild(document.createTextNode(item.popup.text));
+  modalTextCallout.appendChild(document.createTextNode(popup.text || fallbackText));
 
   modalVocabCallout.innerHTML = "";
   const b2 = document.createElement("b");
   b2.textContent = "Word to know: ";
   modalVocabCallout.appendChild(b2);
-  modalVocabCallout.appendChild(document.createTextNode(item.popup.vocab));
+  modalVocabCallout.appendChild(document.createTextNode(popup.vocab || fallbackVocab));
 
   modalQuestionCallout.innerHTML = "";
   const b3 = document.createElement("b");
   b3.textContent = "Quick question: ";
   modalQuestionCallout.appendChild(b3);
-  modalQuestionCallout.appendChild(document.createTextNode(item.popup.question));
+  modalQuestionCallout.appendChild(document.createTextNode(popup.question || fallbackQuestion));
   modalQuestionCallout.appendChild(makeImg(item.img, "questionImg"));
 
   modalLink.innerHTML = "";
@@ -1452,7 +1713,7 @@ function renderPeriodButtons() {
     title.textContent = p.period;
     const meta = document.createElement("div");
     meta.className = "meta";
-    meta.textContent = `${QUESTIONS_PER_CATEGORY} questions`;
+    meta.textContent = `${Math.min(QUESTIONS_PER_CATEGORY, p.items.length)} questions`;
     btn.appendChild(title);
     btn.appendChild(meta);
 
